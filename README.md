@@ -153,7 +153,9 @@ types, runs tests, and uploads the HTML report. It expects this project to be
 at the repository root. The framework is downloaded from GitHub; no local
 framework source directory or compilation step is needed.
 
-The workflow runs on pushes and pull requests targeting `main` or `master`.
+The workflow runs manually only; pushes and pull requests do not trigger it.
+To start a run, open **Actions → Playwright Tests → Run workflow**, select
+the branch, and confirm **Run workflow**.
 Check execution results in the repository's
 [Actions tab](https://github.com/OualidMahan/PlaywrightFrameworkTest/actions).
 The HTML report is uploaded as the `playwright-report` artifact and retained
