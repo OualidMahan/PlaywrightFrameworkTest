@@ -79,6 +79,36 @@ These npm test commands generate page fixture types automatically before
 starting Playwright. Local execution uses Chromium and does not require
 GitHub Actions or a locally built framework.
 
+### Run Playwright directly with npx
+
+Both `npm test` and `npx playwright test` run the Playwright test runner.
+The difference is that `npm test` also runs this project's `pretest` hook to
+generate page fixture types first. `npx playwright test` does not run that hook.
+
+When using `npx`, generate the types before the first run and after adding or
+removing a page file:
+
+```sh
+npm run pages:generate
+npx playwright test
+```
+
+Run the product and cart scenario in a visible browser:
+
+```sh
+npx playwright test tests/product-cart-pom.spec.ts --headed
+```
+
+Open the interactive test interface or an existing HTML report:
+
+```sh
+npx playwright test --ui
+npx playwright show-report
+```
+
+If page files have not changed and the generated types are already up to date,
+there is no need to regenerate them before every `npx` run.
+
 ## Commands
 
 ```sh
