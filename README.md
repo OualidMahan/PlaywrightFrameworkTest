@@ -3,17 +3,24 @@
 Standalone TypeScript automation project using the framework built and released
 on GitHub. No local framework checkout or build is required.
 
+- Automation project: [PlaywrightFrameworkTest](https://github.com/OualidMahan/PlaywrightFrameworkTest).
+- Reusable framework: [PlayWrightRobot](https://github.com/OualidUchiha/PlayWrightRobot).
+- Framework dependency: `@automation/framework`, installed from the GitHub release archive pinned in `package.json`.
+
 ## Setup
 
-Run these commands from this directory:
+Clone this repository and install its dependencies:
 
 ```sh
-cd playwright/saucelabs
+git clone https://github.com/OualidMahan/PlaywrightFrameworkTest.git
+cd PlaywrightFrameworkTest
 npm ci
 npx playwright install chromium
 ```
 
-If this directory is already your project root, omit the `cd` command.
+If you already have a checkout, run the installation commands from the directory
+containing this project's `package.json`. In the existing local workspace,
+that directory is `playwright/saucelabs`.
 Create or edit the single `.env` file at this project root:
 
 ```dotenv
@@ -25,6 +32,13 @@ TEST_PASSWORD=secret_sauce
 These are public SauceDemo demo credentials. `.env` is ignored by Git.
 Existing environment variables take precedence over `.env`.
 The CI workflow supplies the public SauceDemo demo credentials.
+
+Run the initial checks and scenario from the project root:
+
+```sh
+npm run typecheck
+npm test
+```
 
 ## Commands
 
@@ -116,6 +130,12 @@ Keep `node_modules/` for installed dependencies; do not edit its framework files
 types, runs tests, and uploads the HTML report. It expects this project to be
 at the repository root. The framework is downloaded from GitHub; no local
 framework source directory or compilation step is needed.
+
+The workflow runs on pushes and pull requests targeting `main` or `master`.
+Check execution results in the repository's
+[Actions tab](https://github.com/OualidMahan/PlaywrightFrameworkTest/actions).
+The HTML report is uploaded as the `playwright-report` artifact and retained
+for 30 days.
 
 ## Update the framework
 
