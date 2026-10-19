@@ -33,12 +33,51 @@ These are public SauceDemo demo credentials. `.env` is ignored by Git.
 Existing environment variables take precedence over `.env`.
 The CI workflow supplies the public SauceDemo demo credentials.
 
-Run the initial checks and scenario from the project root:
+## Run tests locally
+
+Open a terminal in the project root, where `package.json` is located.
+For the existing local workspace, this is `playwright/saucelabs`. After cloning
+the GitHub repository, it is `PlaywrightFrameworkTest`.
+
+Before the first run, install dependencies and Chromium using the setup commands
+above, then configure your local `.env` file. All three variables (`BASE_URL`,
+`TEST_USERNAME`, and `TEST_PASSWORD`) must have a value. The `.env` file is loaded
+automatically; you do not need to export these variables in your terminal.
+
+Run the type check and all tests locally (the browser runs without a visible window):
 
 ```sh
 npm run typecheck
 npm test
 ```
+
+Run only the product and cart scenario:
+
+```sh
+npm test -- tests/product-cart-pom.spec.ts
+```
+
+Watch the test execute in a visible browser:
+
+```sh
+npm run test:headed -- tests/product-cart-pom.spec.ts
+```
+
+Open Playwright's interactive test interface:
+
+```sh
+npm run test:ui
+```
+
+After execution, open the HTML report:
+
+```sh
+npm run report
+```
+
+These npm test commands generate page fixture types automatically before
+starting Playwright. Local execution uses Chromium and does not require
+GitHub Actions or a locally built framework.
 
 ## Commands
 
