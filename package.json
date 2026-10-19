@@ -1,0 +1,26 @@
+{
+  "name": "@automation/saucelabs",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "pages:generate": "node -e \"require('@automation/framework/generate-page-types')('pages', 'generated/page-registry.generated.ts')\"",
+    "pretest": "npm run pages:generate",
+    "pretest:ui": "npm run pages:generate",
+    "pretest:headed": "npm run pages:generate",
+    "pretypecheck": "npm run pages:generate",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "typecheck": "tsc --noEmit",
+    "report": "playwright show-report"
+  },
+  "dependencies": {
+    "@automation/framework": "https://github.com/OualidUchiha/PlayWrightRobot/releases/download/v1.0.1/automation-framework-1.0.1.tgz"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.5",
+    "dotenv": "^18.0.7",
+    "typescript": "^5.9.3"
+  }
+}
