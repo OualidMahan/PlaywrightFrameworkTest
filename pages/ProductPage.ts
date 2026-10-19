@@ -3,20 +3,25 @@ import { CartPage } from "./CartPage";
 import { BasePage } from "@automation/framework";
 
 export class ProductPage extends BasePage {
-  private readonly productNameDiv: Locator = this.page.getByTestId(
+  private readonly details: Locator = this.page.locator(".inventory_details_container");
+  private readonly productNameDiv: Locator = this.details.getByTestId(
     "inventory-item-name",
   );
-  private readonly productPriceDiv: Locator = this.page.getByTestId(
+  private readonly productPriceDiv: Locator = this.details.getByTestId(
     "inventory-item-price",
   );
-  private readonly addToCartBtn: Locator = this.page.getByRole("button", {
+  private readonly addToCartBtn: Locator = this.details.getByRole("button", {
     name: "Add to cart",
   });
   readonly badge: Locator = this.page.getByTestId("shopping-cart-badge");
-  readonly removeBtn: Locator = this.page.getByRole("button", {
+  readonly removeBtn: Locator = this.details.getByRole("button", {
     name: "Remove",
   });
   readonly cartLink: Locator = this.page.getByTestId("shopping-cart-link");
+
+  async waitUntilLoaded(): Promise<void> {
+    await this.details.waitFor({ state: "visible" });
+  }
 
   async addToCart(): Promise<void> {
     await this.addToCartBtn.click();

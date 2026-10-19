@@ -23,6 +23,8 @@ export class InventoryPage extends BasePage {
     await product.getByText(name, { exact: true }).click();
     await this.page.waitForURL("**/inventory-item.html?id=*");
 
-    return new ProductPage(this.page);
+    const productPage = new ProductPage(this.page);
+    await productPage.waitUntilLoaded();
+    return productPage;
   }
 }
