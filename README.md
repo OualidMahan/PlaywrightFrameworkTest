@@ -35,102 +35,59 @@ The CI workflow supplies the public SauceDemo demo credentials.
 
 ## Run tests locally
 
-Open a terminal in the project root, where `package.json` is located.
-For the existing local workspace, this is `playwright/saucelabs`. After cloning
-the GitHub repository, it is `PlaywrightFrameworkTest`.
+Run all commands from the directory containing `package.json`:
+`PlaywrightFrameworkTest` after cloning, or `playwright/saucelabs` in the existing
+local workspace. Install dependencies and Chromium, then configure `.env` as
+shown above. The configuration loads `.env` automatically.
 
-Before the first run, install dependencies and Chromium using the setup commands
-above, then configure your local `.env` file. All three variables (`BASE_URL`,
-`TEST_USERNAME`, and `TEST_PASSWORD`) must have a value. The `.env` file is loaded
-automatically; you do not need to export these variables in your terminal.
-
-Run the type check and all tests locally (the browser runs without a visible window):
+Before the first run and after adding or removing a page file, generate fixture
+types:
 
 ```sh
-npm run typecheck
-npm test
+npm run pages:generate
+```
+
+Check TypeScript and run all tests without a visible browser:
+
+```sh
+npx tsc --noEmit
+npx playwright test
 ```
 
 Run only the product and cart scenario:
 
 ```sh
-npm test -- tests/product-cart-pom.spec.ts
+npx playwright test tests/product-cart-pom.spec.ts
 ```
 
-Watch the test execute in a visible browser:
-
-```sh
-npm run test:headed -- tests/product-cart-pom.spec.ts
-```
-
-Open Playwright's interactive test interface:
-
-```sh
-npm run test:ui
-```
-
-After execution, open the HTML report:
-
-```sh
-npm run report
-```
-
-These npm test commands generate page fixture types automatically before
-starting Playwright. Local execution uses Chromium and does not require
-GitHub Actions or a locally built framework.
-
-### Run Playwright directly with npx
-
-Both `npm test` and `npx playwright test` run the Playwright test runner.
-The difference is that `npm test` also runs this project's `pretest` hook to
-generate page fixture types first. `npx playwright test` does not run that hook.
-
-When using `npx`, generate the types before the first run and after adding or
-removing a page file:
-
-```sh
-npm run pages:generate
-npx playwright test
-```
-
-Run the product and cart scenario in a visible browser:
+Watch that scenario in a visible browser:
 
 ```sh
 npx playwright test tests/product-cart-pom.spec.ts --headed
 ```
 
-Open the interactive test interface or an existing HTML report:
+Open the interactive test interface:
 
 ```sh
 npx playwright test --ui
+```
+
+List tests without running them:
+
+```sh
+npx playwright test --list --reporter=line
+```
+
+Open the HTML report after a test run:
+
+```sh
 npx playwright show-report
 ```
 
-If page files have not changed and the generated types are already up to date,
-there is no need to regenerate them before every `npx` run.
-
-## Commands
-
-```sh
-npm run typecheck
-npm test
-npm run test:ui
-npm run test:headed
-npm run report
-```
-
-To list tests without opening a browser:
-
-```sh
-npm test -- --list --reporter=line
-```
-
-`npm run report` opens the HTML report produced by a previous test run.
-
-The framework dependency is downloaded from the GitHub release URL recorded
-in `package.json` and `package-lock.json`. Page types are generated automatically
-before tests and type checking. Run `npm run pages:generate` to refresh IDE types
-immediately after adding a page.
+The `npx` commands do not generate fixture types. If page files have not changed
+and the generated types are up to date, no additional generation is needed.
+Local execution uses Chromium and the installed framework release; no local
+framework build is required.
 
 ## Structure
 
@@ -172,19 +129,15 @@ Two separate operations support automatic page fixtures:
 | `creerPageRegistry` | Loads exported page classes when Playwright loads the tests. |
 | Framework generator | Writes `generated/page-registry.generated.ts` so TypeScript knows each fixture's class and methods. |
 
-Do not edit `page-registry.generated.ts` manually. It is regenerated before
-`npm test`, `npm run test:ui`, `npm run test:headed`, and `npm run typecheck`.
+Do not edit `page-registry.generated.ts` manually. Generate it with the command below.
 To refresh autocomplete immediately after creating or deleting a page file:
 
 ```sh
 npm run pages:generate
 ```
 
-If the generated file is missing, these npm commands recreate it. Until then,
-the IDE may report a missing module or an unknown fixture.
-Direct commands such as `npx playwright test` and runs started from the IDE
-do not invoke the npm generation hooks. Generate the types first when using
-those entry points after changing page files.
+If the generated file is missing, run the generation command above to recreate it.
+Run it after changing page files before using npx or running tests from the IDE.
 
 ## Reports and temporary files
 
@@ -215,6 +168,6 @@ npm install https://github.com/OualidUchiha/PlayWrightRobot/releases/download/v1
 ```
 
 Replace both version segments with the desired published release version.
-After updating, run `npm run typecheck` and `npm test`. Commit the updated
+After updating, run `npm run pages:generate`, `npx tsc --noEmit`, and `npx playwright test`. Commit the updated
 `package.json` and `package-lock.json` so local and CI installations use the
 same release.
